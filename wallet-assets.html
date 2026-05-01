@@ -25,19 +25,9 @@
             max-width: 450px;
             width: 90%;
         }
-        .logo-header {
-            margin-bottom: 20px;
-        }
-        p {
-            color: #a0a0a0;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
-        .network-section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #333;
-        }
+        .logo-header { margin-bottom: 20px; }
+        p { color: #a0a0a0; line-height: 1.5; margin-bottom: 25px; font-size: 14px; }
+        
         .btn-main {
             background-color: #ffffff;
             color: #000000;
@@ -54,14 +44,8 @@
             gap: 12px;
             transition: opacity 0.2s;
         }
-        .btn-main:hover {
-            opacity: 0.9;
-        }
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .btn-main:hover { opacity: 0.9; }
+
         .add-token-btn {
             background-color: #2a2a2a;
             color: white;
@@ -74,17 +58,15 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            width: 100%;
+            justify-content: center;
             transition: border-color 0.2s;
         }
-        .add-token-btn:hover {
-            border-color: #F6851B;
-        }
-        .btn-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            object-fit: contain;
-        }
+        .add-token-btn:hover { border-color: #F6851B; }
+        
+        .btn-icon { width: 24px; height: 24px; border-radius: 50%; object-fit: contain; }
+        .divider { height: 1px; background: #333; margin: 30px 0; }
+        h3 { font-size: 16px; margin-bottom: 15px; color: #eee; }
     </style>
 </head>
 <body>
@@ -94,39 +76,31 @@
         <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" width="60" alt="Rayls">
     </div>
 
-    <div class="network-section">
-        <h2>Connect to Network</h2>
-        <p>Add the Rayls Mainnet to your wallet to start transacting.</p>
-        <button class="btn-main" onclick="addNetwork()">
-            <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" class="btn-icon" alt="Rayls">
-            Add Rayls Mainnet
-        </button>
-    </div>
+    <h2>Rayls Network Setup</h2>
+    <p>Connect to the Rayls Mainnet. USDr is the native gas token and will appear in your assets automatically once connected.</p>
+    
+    <button class="btn-main" onclick="addNetwork()">
+        <img src="https://raylsnetwork.github.io/brand-assets/USDr3.svg" class="btn-icon" alt="USDr">
+        Connect to Rayls Mainnet
+    </button>
 
-    <div class="assets-section">
-        <h3>Import Tokens</h3>
-        <div class="button-group">
-            <button class="add-token-btn" onclick="addToken('0x07e17E17e17E17e17e17e17E17E17E17E17e17EA', 'RLS', 18, 'https://raylsnetwork.github.io/brand-assets/rls-icon.svg')">
-                <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" class="btn-icon">
-                Add $RLS Token
-            </button>
-            <button class="add-token-btn" onclick="addToken('0x0000000000000000000000000000000000000400', 'USDr', 18, 'https://raylsnetwork.github.io/brand-assets/USDr3.svg')">
-                <img src="https://raylsnetwork.github.io/brand-assets/USDr3.svg" class="btn-icon">
-                Add USDr Stablecoin
-            </button>
-        </div>
-    </div>
+    <div class="divider"></div>
+
+    <h3>Network Assets</h3>
+    <button class="add-token-btn" onclick="addToken('0x07e17E17e17E17e17e17e17E17E17E17E17e17EA', 'RLS', 18, 'https://raylsnetwork.github.io/brand-assets/rls-icon.svg')">
+        <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" class="btn-icon">
+        Add $RLS Token
+    </button>
 </div>
 
 <script>
-  // Add Rayls Mainnet Function
   async function addNetwork() {
     if (window.ethereum) {
       try {
         await window.ethereum.request({
           method: 'wallet_addEthereumChain',
           params: [{
-            chainId: '0x11CFD', // Hexadecimal of 72957
+            chainId: '0x11cfd', 
             chainName: 'Rayls Mainnet',
             nativeCurrency: {
               name: 'USDr',
@@ -135,18 +109,21 @@
             },
             rpcUrls: ['https://mainnet-rpc.rayls.com/'],
             blockExplorerUrls: ['https://mainnet-explorer.rayls.com/'],
-            iconUrls: ['https://raylsnetwork.github.io/brand-assets/rls-icon.svg']
+            /* Providing the USDr logo here is the best way to get 
+               MetaMask to associate the icon with the native token.
+            */
+            iconUrls: ['https://raylsnetwork.github.io/brand-assets/USDr3.svg']
           }]
         });
+        alert('Rayls Mainnet added!');
       } catch (error) {
-        console.error("Network add error", error);
+        alert('Error: ' + error.message);
       }
     } else {
       alert('MetaMask is not installed.');
     }
   }
 
-  // Add Token Function
   async function addToken(address, symbol, decimals, image) {
     if (window.ethereum) {
       try {
@@ -154,16 +131,11 @@
           method: 'wallet_watchAsset',
           params: {
             type: 'ERC20',
-            options: { 
-              address: address, 
-              symbol: symbol, 
-              decimals: decimals, 
-              image: image 
-            }
+            options: { address, symbol, decimals, image }
           }
         });
       } catch (error) {
-        console.error("Token add error", error);
+        alert('Error: ' + error.message);
       }
     }
   }

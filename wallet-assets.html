@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add $RLS to MetaMask</title>
+    <title>Rayls Network | Add Assets</title>
     <style>
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -11,9 +11,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            background-color: #121212; /* Dark theme to match your docs */
+            background-color: #121212;
             color: #ffffff;
         }
         .container {
@@ -22,48 +22,76 @@
             background-color: #1e1e1e;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            max-width: 400px;
+            max-width: 450px;
+            width: 90%;
+        }
+        .logo-header {
+            margin-bottom: 20px;
+            opacity: 0.9;
         }
         p {
             color: #a0a0a0;
             line-height: 1.5;
-            margin-bottom: 24px;
+            margin-bottom: 30px;
         }
-        button {
-            background-color: #F6851B;
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .add-token-btn {
+            background-color: #333;
             color: white;
-            border: none;
-            padding: 12px 24px;
+            border: 1px solid #444;
+            padding: 14px 24px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             font-family: inherit;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 12px;
+            justify-content: flex-start;
+            gap: 15px;
             width: 100%;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease;
         }
-        button:hover {
-            background-color: #e27618;
+        .add-token-btn:hover {
+            background-color: #444;
+            border-color: #F6851B; /* MetaMask Orange Highlight */
+            transform: translateY(-2px);
+        }
+        .btn-icon {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Add $RLS Token</h2>
-    <p>Click the button below to add the Rayls Public Chain $RLS token to your MetaMask wallet.</p>
-    <button id="add-rls-button">
-        <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" alt="RLS Icon" width="24" height="24">
-        Add $RLS to MetaMask
-    </button>
+    <div class="logo-header">
+        <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" width="60" alt="Rayls Logo">
+    </div>
+    <h2>Rayls Public Chain Assets</h2>
+    <p>Select a token to add it directly to your MetaMask wallet.</p>
+    
+    <div class="button-group">
+        <button class="add-token-btn" onclick="addToken('0xYOUR_RLS_CONTRACT_ADDRESS', 'RLS', 18, 'https://raylsnetwork.github.io/brand-assets/rls-icon.svg')">
+            <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" class="btn-icon" alt="RLS">
+            Add $RLS to MetaMask
+        </button>
+
+        <button class="add-token-btn" onclick="addToken('0x0000000000000000000000000000000000000400', 'USDr', 18, 'https://raylsnetwork.github.io/brand-assets/USDr.svg')">
+            <img src="https://raylsnetwork.github.io/brand-assets/USDr.svg" class="btn-icon" alt="USDr">
+            Add USDr to MetaMask
+        </button>
+    </div>
 </div>
 
 <script>
-  document.getElementById('add-rls-button').addEventListener('click', async () => {
+  async function addToken(address, symbol, decimals, image) {
     if (typeof window.ethereum !== 'undefined') {
       try {
         const wasAdded = await window.ethereum.request({
@@ -71,26 +99,24 @@
           params: {
             type: 'ERC20', 
             options: {
-              address: '0x07e17E17e17E17e17e17e17E17E17E17E17e17EA',
-              symbol: 'RLS', 
-              decimals: 18, // <--- UPDATE IF NOT 18
-              image: 'https://raylsnetwork.github.io/brand-assets/rls-icon.svg', 
+              address: address,
+              symbol: symbol,
+              decimals: decimals,
+              image: image,
             },
           },
         });
 
         if (wasAdded) {
-          console.log('$RLS token added to wallet!');
-        } else {
-          console.log('User rejected the request.');
+          console.log(`${symbol} was added!`);
         }
       } catch (error) {
-        console.error('Error adding token:', error);
+        console.error(`Error adding ${symbol}:`, error);
       }
     } else {
-      alert('MetaMask does not appear to be installed. Please install it to add the $RLS token.');
+      alert('MetaMask not detected. Please install the MetaMask extension.');
     }
-  });
+  }
 </script>
 
 </body>

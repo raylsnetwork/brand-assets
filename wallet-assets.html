@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add $RLS to MetaMask</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #121212; /* Dark theme to match your docs */
+            color: #ffffff;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+        }
+        p {
+            color: #a0a0a0;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+        button {
+            background-color: #F6851B;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #e27618;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Add $RLS Token</h2>
+    <p>Click the button below to add the Rayls Public Chain $RLS token to your MetaMask wallet.</p>
+    <button id="add-rls-button">
+        <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" alt="RLS Icon" width="24" height="24">
+        Add $RLS to MetaMask
+    </button>
+</div>
+
+<script>
+  document.getElementById('add-rls-button').addEventListener('click', async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const wasAdded = await window.ethereum.request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20', 
+            options: {
+              address: '0xYOUR_RLS_CONTRACT_ADDRESS_HERE', // <--- REPLACE THIS
+              symbol: 'RLS', 
+              decimals: 18, // <--- UPDATE IF NOT 18
+              image: 'https://raylsnetwork.github.io/brand-assets/rls-icon.svg', 
+            },
+          },
+        });
+
+        if (wasAdded) {
+          console.log('$RLS token added to wallet!');
+        } else {
+          console.log('User rejected the request.');
+        }
+      } catch (error) {
+        console.error('Error adding token:', error);
+      }
+    } else {
+      alert('MetaMask does not appear to be installed. Please install it to add the $RLS token.');
+    }
+  });
+</script>
+
+</body>
+</html>

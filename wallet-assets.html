@@ -83,6 +83,7 @@
             width: 24px;
             height: 24px;
             border-radius: 50%;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -105,11 +106,11 @@
     <div class="assets-section">
         <h3>Import Tokens</h3>
         <div class="button-group">
-            <button class="add-token-btn" onclick="addToken('0xYOUR_RLS_CONTRACT_ADDRESS', 'RLS', 18, 'https://raylsnetwork.github.io/brand-assets/rls-icon.svg')">
+            <button class="add-token-btn" onclick="addToken('0x07e17E17e17E17e17e17e17E17E17E17E17e17EA', 'RLS', 18, 'https://raylsnetwork.github.io/brand-assets/rls-icon.svg')">
                 <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" class="btn-icon">
                 Add $RLS Token
             </button>
-            <button class="add-token-btn" onclick="addToken('0x0000000000000000000000000000000000000400', 'USDr', 18, 'https://raylsnetwork.github.io/brand-assets/USDr.svg')">
+            <button class="add-token-btn" onclick="addToken('0x0000000000000000000000000000000000000400', 'USDr', 18, 'https://raylsnetwork.github.io/brand-assets/USDr3.svg')">
                 <img src="https://raylsnetwork.github.io/brand-assets/USDr3.svg" class="btn-icon">
                 Add USDr Stablecoin
             </button>
@@ -153,7 +154,12 @@
           method: 'wallet_watchAsset',
           params: {
             type: 'ERC20',
-            options: { address, symbol, decimals, image }
+            options: { 
+              address: address, 
+              symbol: symbol, 
+              decimals: decimals, 
+              image: image 
+            }
           }
         });
       } catch (error) {

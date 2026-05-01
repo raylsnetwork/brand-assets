@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rayls Network | Add Assets</title>
+    <title>Rayls Network | Wallet Setup</title>
     <style>
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -27,44 +27,62 @@
         }
         .logo-header {
             margin-bottom: 20px;
-            opacity: 0.9;
         }
         p {
             color: #a0a0a0;
             line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        .network-section {
             margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+        .btn-main {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: opacity 0.2s;
+        }
+        .btn-main:hover {
+            opacity: 0.9;
         }
         .button-group {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
         .add-token-btn {
-            background-color: #333;
+            background-color: #2a2a2a;
             color: white;
             border: 1px solid #444;
-            padding: 14px 24px;
+            padding: 12px 20px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
-            font-family: inherit;
             display: flex;
             align-items: center;
-            justify-content: flex-start;
-            gap: 15px;
-            width: 100%;
-            transition: all 0.2s ease;
+            gap: 12px;
+            transition: border-color 0.2s;
         }
         .add-token-btn:hover {
-            background-color: #444;
-            border-color: #F6851B; /* MetaMask Orange Highlight */
-            transform: translateY(-2px);
+            border-color: #F6851B;
         }
         .btn-icon {
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
         }
     </style>
 </head>
@@ -72,49 +90,75 @@
 
 <div class="container">
     <div class="logo-header">
-        <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" width="60" alt="Rayls Logo">
+        <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" width="60" alt="Rayls">
     </div>
-    <h2>Rayls Public Chain Assets</h2>
-    <p>Select a token to add it directly to your MetaMask wallet.</p>
-    
-    <div class="button-group">
-        <button class="add-token-btn" onclick="addToken('0xYOUR_RLS_CONTRACT_ADDRESS', 'RLS', 18, 'https://raylsnetwork.github.io/brand-assets/rls-icon.svg')">
-            <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" class="btn-icon" alt="RLS">
-            Add $RLS to MetaMask
-        </button>
 
-        <button class="add-token-btn" onclick="addToken('0x0000000000000000000000000000000000000400', 'USDr', 18, 'https://raylsnetwork.github.io/brand-assets/USDr.svg')">
-            <img src="https://raylsnetwork.github.io/brand-assets/USDr.svg" class="btn-icon" alt="USDr">
-            Add USDr to MetaMask
+    <div class="network-section">
+        <h2>Connect to Network</h2>
+        <p>Add the Rayls Mainnet to your wallet to start transacting.</p>
+        <button class="btn-main" onclick="addNetwork()">
+            <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" class="btn-icon" alt="Rayls">
+            Add Rayls Mainnet
         </button>
+    </div>
+
+    <div class="assets-section">
+        <h3>Import Tokens</h3>
+        <div class="button-group">
+            <button class="add-token-btn" onclick="addToken('0xYOUR_RLS_CONTRACT_ADDRESS', 'RLS', 18, 'https://raylsnetwork.github.io/brand-assets/rls-icon.svg')">
+                <img src="https://raylsnetwork.github.io/brand-assets/rls-icon.svg" class="btn-icon">
+                Add $RLS Token
+            </button>
+            <button class="add-token-btn" onclick="addToken('0x0000000000000000000000000000000000000400', 'USDr', 18, 'https://raylsnetwork.github.io/brand-assets/USDr.svg')">
+                <img src="https://raylsnetwork.github.io/brand-assets/USDr.svg" class="btn-icon">
+                Add USDr Stablecoin
+            </button>
+        </div>
     </div>
 </div>
 
 <script>
-  async function addToken(address, symbol, decimals, image) {
-    if (typeof window.ethereum !== 'undefined') {
+  // Add Rayls Mainnet Function
+  async function addNetwork() {
+    if (window.ethereum) {
       try {
-        const wasAdded = await window.ethereum.request({
-          method: 'wallet_watchAsset',
-          params: {
-            type: 'ERC20', 
-            options: {
-              address: address,
-              symbol: symbol,
-              decimals: decimals,
-              image: image,
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [{
+            chainId: '0x11CFD', // Hexadecimal of 72957
+            chainName: 'Rayls Mainnet',
+            nativeCurrency: {
+              name: 'USDr',
+              symbol: 'USDr',
+              decimals: 18
             },
-          },
+            rpcUrls: ['https://mainnet-rpc.rayls.com/'],
+            blockExplorerUrls: ['https://mainnet-explorer.rayls.com/'],
+            iconUrls: ['https://raylsnetwork.github.io/brand-assets/rls-icon.svg']
+          }]
         });
-
-        if (wasAdded) {
-          console.log(`${symbol} was added!`);
-        }
       } catch (error) {
-        console.error(`Error adding ${symbol}:`, error);
+        console.error("Network add error", error);
       }
     } else {
-      alert('MetaMask not detected. Please install the MetaMask extension.');
+      alert('MetaMask is not installed.');
+    }
+  }
+
+  // Add Token Function
+  async function addToken(address, symbol, decimals, image) {
+    if (window.ethereum) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20',
+            options: { address, symbol, decimals, image }
+          }
+        });
+      } catch (error) {
+        console.error("Token add error", error);
+      }
     }
   }
 </script>
